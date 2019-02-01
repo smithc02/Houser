@@ -7,6 +7,11 @@ const controller = require('./controller');
 
 app.use(json());
 
+app.get('/api/houser', controller.getHouse);
+app.post('/api/houser', controller.create);
+app.delete('/api/houser/:id', controller.delete);
+app.put('/api/houser/:id', controller.update)
+
 massive(process.env.CONNECTION_STRING)
 	.then(dbInstance => {
 		app.set('db', dbInstance);
