@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
+import { connect } from 'react-redux';
+import {
+	updateName,
+	updateAddress,
+	updateCity,
+	updateStates,
+	updateZipcode
+} from '../../ducks/reducer';
 
 class Wizard extends Component {
 	constructor(props) {
@@ -11,6 +19,15 @@ class Wizard extends Component {
 			state: '',
 			zipcode: 0
 		};
+	}
+
+	componentDidMount() {
+		Axios.get(
+			`http//localhost:3001/api/houser?name=${this.props.match.params
+				.name}`
+		).then(results => {
+			this.setState({ name: results.data });
+		});
 	}
 
 	inputData = () => {
@@ -37,6 +54,15 @@ class Wizard extends Component {
 	};
 
 	render() {
+		console.log(this.props);
+		const {
+			updateAddress,
+			updateCity,
+			updateName,
+			updateStates,
+			updateZipcode
+		} = this.props;
+
 		return (
 			<div className="new_prop_holder">
 				<p className="adding_property"> </p>
@@ -46,9 +72,8 @@ class Wizard extends Component {
 						Name:
 						<input
 							type="text"
-							value={this.state.name}
-							onChange={e =>
-								this.setState({ name: e.target.value })}
+							// value={this.props.name}
+							onChange={e => updateName(e.target.value)}
 						/>
 					</label>
 
@@ -56,9 +81,8 @@ class Wizard extends Component {
 						Address:
 						<input
 							type="text"
-							value={this.state.address}
-							onChange={e =>
-								this.setState({ address: e.target.value })}
+							// value={this.props.address}
+							onChange={e => updateAddress(e.target.value)}
 						/>
 					</label>
 
@@ -66,9 +90,8 @@ class Wizard extends Component {
 						City:
 						<input
 							type="text"
-							value={this.state.city}
-							onChange={e =>
-								this.setState({ city: e.target.value })}
+							// value={this.props.city}
+							onChange={e => updateCity(e.target.value)}
 						/>
 					</label>
 
@@ -76,10 +99,9 @@ class Wizard extends Component {
 						State:
 						<input
 							type="text"
-							maxlength="2"
-							value={this.state.state}
-							onChange={e =>
-								this.setState({ state: e.target.value })}
+							// maxlength="2"
+							// value={this.props.states}
+							onChange={e => updateStates(e.target.value)}
 						/>
 					</label>
 
@@ -87,15 +109,13 @@ class Wizard extends Component {
 						Zipcode:
 						<input
 							type="number"
-							max="5"
-							value={this.state.zipcode}
-							onChange={e =>
-								this.setState({ zipcode: e.target.value })}
+							value={this.props.zipcode}
+							onChange={e => updateZipcode(e.target.value)}
 						/>
 					</label>
 					<button
 						className="add_new_property"
-						onClick={this.inputData}
+						onClick={() => this.inputData()}
 					>
 						Complete
 					</button>
@@ -104,5 +124,22 @@ class Wizard extends Component {
 		);
 	}
 }
-export default Wizard;
-//cancel button in here
+function mapStateToProps(state) {
+	const { address, city, name, states, zipcode } = state;
+
+	return {
+		address,
+		city,
+		name,
+		states,
+		zipcode
+	};
+}
+
+export default connect(mapStateToProps, {
+	updateName,
+	updateCity,
+	updateAddress,
+	updateStates,
+	updateZipcode
+})(Wizard);

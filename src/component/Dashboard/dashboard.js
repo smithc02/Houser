@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-import House from './house';
+import House from '../House/house';
 
 class Dashboard extends Component {
 	constructor(props) {
@@ -9,26 +9,39 @@ class Dashboard extends Component {
 			houses: []
 		};
 	}
-	componentDidMount(){
-		this.getData()
+	componentDidMount() {
+		this.getData();
+
 	}
-getData = ()=> {
-	Axios.get('/api/houser').then(res => {
-		console.log('Houser API response', res);
-		this.setState({houses: res.data})
-	})
-	.catch(err => console.log(err));
-}
-	
+	getData = () => {
+		Axios.get('/api/houser')
+			.then(res => {
+				console.log('Houser API response', res);
+				this.setState({ houses: res.data });
+			})
+			.catch(err => console.log(err));
+	};
 
 	render() {
-		
+		let houseDisplay = this.state.houses.map((house, i) =>{
+			return(
+				<House
+				key={i}
+				name={house.name}
+				address={house.address}
+				city={house.city}
+				state={house.state}
+				zipcode={house.zipcode}
+				
+				
+				/>
+			)
+		})
 		return (
-		<div>
-			
-
-		</div>
-		)
+			<div>
+				{houseDisplay}
+			</div>
+		);
 	}
 }
 

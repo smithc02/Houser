@@ -1,7 +1,4 @@
-import { createStore, applyMiddleware} from 'redux';
-import promiseMiddleware from "redux-promise-middleware";
+import { createStore } from 'redux';
+import reducer from './reducer';
 
-
-const reducers = combineReducers({})
-
-export default createStore(reducers, applyMiddleware(promiseMiddleware))
+export default createStore(reducer);
